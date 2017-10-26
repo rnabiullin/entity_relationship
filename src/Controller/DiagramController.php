@@ -3,6 +3,7 @@
 namespace Drupal\entity_relationship\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\entity_relationship\Diagram;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -19,14 +20,21 @@ class DiagramController extends ControllerBase {
   protected $requestStack;
 
   /**
+   * @var \Drupal\entity_relationship\Diagram
+   */
+  protected $diagram;
+
+  /**
    * ReportController constructor.
    *
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   The request stack.
+   * @param \Drupal\entity_relationship\Diagram $diagram
+   *   Class for create relationships diagram.
    */
-  public function __construct(RequestStack $request_stack) {
+  public function __construct(RequestStack $request_stack, Diagram $diagram) {
     $this->requestStack = $request_stack;
-
+    $this->diagram = $diagram;
   }
 
   /**
@@ -34,7 +42,8 @@ class DiagramController extends ControllerBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('request_stack')
+      $container->get('request_stack'),
+      $container->get('entity_relationship.diagram')
     );
   }
 
@@ -49,9 +58,8 @@ class DiagramController extends ControllerBase {
     $request = $this->requestStack->getCurrentRequest();
     $entity_types = $request->query->get('entities');
 
-    $graph = \Drupal::service('entity_relationship.diagram');
-    $graph->create($entity_types);
-    $graph_string = $graph->generateGraph();
+    $this->diagram->create($entity_types);
+    $graph_string = $this->diagram->generateGraph();
 
     $build['#attached']['library'][] = 'entity_relationship/entity_relationship';
     $build['#attached']['drupalSettings']['entity_relationship']['dataSVG'] = $graph_string;
