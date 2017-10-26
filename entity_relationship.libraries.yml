@@ -1,0 +1,18 @@
+viz.js:
+  remote: http://viz-js.com
+  version: 1.7.1
+  license:
+    name: MIT
+    url: https://github.com/mdaines/viz.js/blob/master/LICENSE
+    gpl-compatible: true
+  js:
+    http://viz-js.com/bower_components/viz.js/viz.js: { type: external, minified: true }
+
+entity_relationship:
+  version: 1.0
+  js:
+    entity_relationship.js: {}
+  dependencies:
+    - core/drupal
+    - core/drupalSettings
+    - entity_relationship/viz.js

@@ -1,0 +1,4 @@
+entity_relationship.form_page:
+  title: Entity relation diagram
+  route_name: entity_relationship.form
+  parent: system.admin_reports

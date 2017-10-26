@@ -1,0 +1,4 @@
+administer entity relationship diagram:
+  title: 'Administer entity relationship diagram'
+  description: 'View and configure entity relationship diagram.'
+  restrict access: true
