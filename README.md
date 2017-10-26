@@ -1,6 +1,6 @@
 # Entity relationship diagram
 This module generates entity relationship diagram for chosen content entities. 
-This module was ported from Drupal 7 with my improvement.
+This module was ported from Drupal 7 [entitiesdiagram](https://github.com/Gizra/entitiesdiagram) with my improvement.
 
 # Usage
 Go to `/admin/reports/diagram` to see form with available content entity types.
