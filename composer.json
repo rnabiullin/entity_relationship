@@ -1,0 +1,12 @@
+{
+  "name": "Entity relationship",
+  "type": "drupal-module",
+  "description": "Builds entity relationship graph to show project's structure",
+  "keywords": ["Drupal", "graph"],
+  "homepage": "https://github.com/skilld-labs/entity_relationship",
+  "authors": [
+    {
+      "name": "Roman Nabiullin (nabiullin)"
+    }
+  ]
+}
