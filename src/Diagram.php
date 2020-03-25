@@ -132,6 +132,9 @@ class Diagram {
                 $field_property_info['type'] = 'list<' . $field_property_info['type'] . '>';
               }
 
+              $reference_target_type = NULL;
+              $target_bundles = [];
+              // Get target info from entity reference field type.
               if ($instance_info->getType() == 'entity_reference' || $instance_info->getType() == 'entity_reference_revisions') {
                 $reference_definition = $instance_info->getItemDefinition()->getSettings();
                 $reference_target_type = $reference_definition['target_type'];
@@ -144,20 +147,28 @@ class Diagram {
                 else {
                   $target_bundles = [];
                 }
-
-                if (!empty($target_bundles)) {
-                  $stop = null;
-                  foreach ($target_bundles as $target_bundle) {
-                    $entity_refs[$entity->id()][$bundle_name][$field_name][$reference_target_type] = [
-                      'bundle' => $target_bundle,
-                      'cardinality' => $instance_info->getFieldStorageDefinition()->getCardinality(),
-                      'required' => $instance_info->isRequired(),
-                      'fieldname' => $field_name,
-                    ];
-                  }
+              }
+              else {
+                // Get target info for other field types.
+                switch ($instance_info->getType()) {
+                  case 'image':
+                  case 'file':
+                    $reference_target_type = 'file';
+                    $target_bundles = ['file'];
+                    break;
                 }
               }
 
+              if ($reference_target_type && !empty($target_bundles)) {
+                foreach ($target_bundles as $target_bundle) {
+                  $entity_refs[$entity->id()][$bundle_name][$field_name][$reference_target_type] = [
+                    'bundle' => $target_bundle,
+                    'cardinality' => $instance_info->getFieldStorageDefinition()->getCardinality(),
+                    'required' => $instance_info->isRequired(),
+                    'fieldname' => $field_name,
+                  ];
+                }
+              }
               $this->graph['entities'][$cluster_entity_group_name]['entity_' . $entity_type . '__bundle_' . $bundle_name]['fields'][$field_name] = $field_property_info;
             }
           }
@@ -166,7 +177,6 @@ class Diagram {
         $group['label'] = $entity->getLabel();
         $group['group'] = TRUE;
       }
-
       // Entity reference edges.
       if (isset($entity_refs[$entity_type])) {
         foreach ($entity_refs[$entity_type] as $bundle_name => $field_ref_info) {
